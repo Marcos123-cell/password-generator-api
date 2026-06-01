@@ -4,20 +4,21 @@ import com.marcoseduardo.password_generator_api.dto.SenhaResponseDTO;
 import com.marcoseduardo.password_generator_api.exceptions.TamanhoInvalidoException;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 @Service
 public class SenhaService {
 
-    Random random = new Random();
+    SecureRandom secureRandom = new SecureRandom();
 
     private char sortearCaractere(){
         String caracteres = "abcdefghijklmnopq" +
                 "rstuvwxyzABCDEFGHIJKLMNOP" +
                 "QRSTUVWXYZ0123456789!@#$%&*";
 
-        return caracteres.charAt(random.nextInt(caracteres.length()));
+        return caracteres.charAt(secureRandom.nextInt(caracteres.length()));
     }
 
     public SenhaResponseDTO gerarSenha(Integer tamanho){
@@ -28,14 +29,12 @@ public class SenhaService {
 
         StringBuilder senhaGerada = new StringBuilder();
 
-        String senha = "";
-
-        for(int i = 0; i <= tamanho; i++){
-            senha = senhaGerada.append(sortearCaractere()).toString();
+        for(int i = 0; i < tamanho; i++){
+            senhaGerada.append(sortearCaractere());
         }
 
         SenhaResponseDTO senhaResponseDTO = new SenhaResponseDTO(
-                senha,
+                senhaGerada.toString(),
                 tamanho
         );
 
